@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Checks the usage of Datadog custom metrics and notifies
+  when number of usage custom metrics is greater than your limit.
+Globals:
+  Function:
+    Timeout: 60
+Parameters:
+  DatadogApiKeySSM:
+    Type: AWS::SSM::Parameter::Name
+    Description: The Systems Manager Parameter Store name of your Datadog API Key.
+  DatadogApplicationKeySSM:
+    Type: AWS::SSM::Parameter::Name
+    Description: The Systems Manager Parameter Store name of your Datadog Application Key.
+  CustomMetricsIncludedPerHost:
+    Type: Number
+    Default: 100
+    Description: >
+      The number of Datadog custom metrics included per host. It depends on your plan.
+      You can also input your own number for customizing the upper limit.
+  SlackTokenSSM:
+    Type: AWS::SSM::Parameter::Name
+    Default: ''
+    Description: The Systems Manager Parameter Store name of Slack token for sending message.
+  SlackChannelId:
+    Type: String
+    Description: The Slack channel ID where message is sent to
+  SlackMessageTemplate:
+    Type: String
+    Default: |
+      Your number of custom metrics is greater than
+      Number of hosts: *#{avg_of_num_hosts}*, custom metrics limit: *#{custom_metrics_limit}*.
+      Avg of using custom metrics per hour: *#{avg_of_num_custom_metrics}*.
+      Check from _#{check_from}_ to _#{check_to}_ (UTC time).
+      Check custom metrics usage at https://app.datadoghq.com/account/usage
+    Description: The message template. The variable macros '#{[a-z+_]}' would be replaced.
+  RunSchedule:
+    Type: String
+    Default: cron(0 0 * * ? *)
+    Description: |
+      Run schedule expression. Default is execute check at 0:00 everyday.
+      The syntax must follow: https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+  ExecutionIAMRoleArn:
+    Type: String
+    Default: ''
+    Description: |
+      The Arn of IAM role for executing check function. Leave blank if you want to create role automatically.
+Conditions:
+  CreateIAMRole: !Equals [!Ref ExecutionIAMRoleArn, '']
+Resources:
+  checkDatadogCustomMetricsUsage:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: functions/check-custom-metrics-usage.handler
+      Runtime: nodejs10.x
+      Role: !If [CreateIAMRole, !GetAtt checkDatadogCustomMetricsUsageRole.Arn, !Ref ExecutionIAMRoleArn]
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref RunSchedule
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          DATADOG_API_KEY_SSM: !Ref DatadogApiKeySSM
+          DATADOG_APP_KEY_SSM: !Ref DatadogApplicationKeySSM
+          CUSTOM_METRICS_INCLUDED_PER_HOST: !Ref CustomMetricsIncludedPerHost
+          SLACK_TOKEN_SSM: !Ref SlackTokenSSM
+          SLACK_CHANNEL_ID: !Ref SlackChannelId
+          SLACK_MESSAGE_TEMPLATE: !Ref SlackMessageTemplate
+
+  checkDatadogCustomMetricsUsageRole:
+    Condition: CreateIAMRole
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: AllowGetAndDecryptSSMParameters
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource:
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatadogApiKeySSM}
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatadogApplicationKeySSM}
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${SlackTokenSSM}
+Outputs:
+  CheckDatadogCustomMetricsUsageFunction:
+    Description: "Check datadog custom metrics usage function"
+    Value: !GetAtt checkDatadogCustomMetricsUsage.Arn

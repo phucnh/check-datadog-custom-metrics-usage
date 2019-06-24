@@ -1,0 +1,24 @@
+{
+  "name": "check-datadog-custom-metrics-limit",
+  "version": "0.0.1",
+  "description": "Check datadog custom metrics limit",
+  "scripts": {
+    "format-code": "prettier --config ./dev-tools/prettier.config.js --write \"**/**.{js,json}\"",
+    "test": "mocha --recursive test/**/**.js"
+  },
+  "keywords": [
+    "aws-sam",
+    "datadog"
+  ],
+  "author": "phucnh",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "prettier": "^1.18.2",
+    "rewire": "^4.0.1"
+  }
+}
