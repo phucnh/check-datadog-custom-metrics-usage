@@ -101,5 +101,4 @@ Variable template              | Description
 
 ### TODO
 
-- [ ] Setup KMS Key
 - [ ] Create SAR
