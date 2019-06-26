@@ -18,9 +18,9 @@ deploy:         ## Deploy SAM application
 		--stack-name $(CLOUD_FORMATION_STACK_NAME) \
 		--capabilities CAPABILITY_IAM \
 		--parameter-overrides \
-			DatadogApiKeySSM="$(DATADOG_API_KEY_SSM)" \
-			DatadogApplicationKeySSM="$(DATADOG_APP_KEY_SSM)" \
-			SlackTokenSSM="$(SLACK_TOKEN_SSM)" \
+			DatadogApiKeySSMParamName="$(DATADOG_API_KEY_SSM_PARAM_NAME)" \
+			DatadogApplicationKeySSMParamName="$(DATADOG_APP_KEY_SSM_PARAM_NAME)" \
+			SlackTokenSSMParamName="$(SLACK_TOKEN_SSM_PARAM_NAME)" \
 			SlackChannelId="$(SLACK_CHANNEL_ID)" \
 			ExecutionIAMRoleArn="$(EXECUTION_IAM_ROLE_ARN)"
 
