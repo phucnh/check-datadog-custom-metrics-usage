@@ -1,5 +1,18 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: check-datadog-custom-metrics-usage
+    Description: |
+      Servlerless application that checks the usage of Datadog custom metrics
+    Author: phucnh
+    SpdxLicenseId: MIT
+    LicenseUrl: s3://check-datadog-custom-metrics-usage/metadata/LICENSE
+    ReadmeUrl: s3://check-datadog-custom-metrics-usage/metadata/README.md
+    Labels: ['datadog']
+    HomePageUrl: https://github.com/phucnh/check-datadog-custom-metrics-usage
+    SemanticVersion: 0.0.1
+    SourceCodeUrl: https://github.com/phucnh/check-datadog-custom-metrics-usage
 Description: >
   Checks the usage of Datadog custom metrics and notifies
   when number of usage custom metrics is greater than your limit.
