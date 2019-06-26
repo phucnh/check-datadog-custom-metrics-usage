@@ -93,6 +93,12 @@ DATADOG_API_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   make deploy
 ```
 
+## Publish to [AWS SAR](https://aws.amazon.com/serverless/serverlessrepo/)
+
+```bash
+make build package publish
+```
+
 ## Message Template
 
 You can custom the notification message by set the `SLACK_MESSAGE_TEMPLATE` environment variable.
@@ -105,7 +111,3 @@ Variable template              | Description
 `#{custom_metrics_limit}`      | The upper limit of your usage custom metrics. When `avg_of_num_custom_metrics` is greater than this value, the notification is sent. Calculated by `round(avg_of_num_hosts) * CUSTOM_METRICS_INCLUDED_PER_HOST`
 `#{check_from}`                | The beginning hour of checking process (in UTC)
 `#{check_to}`                  | The ending hour of checking process (in UTC)
-
-### TODO
-
-- [ ] Create SAR
