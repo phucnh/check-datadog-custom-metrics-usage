@@ -36,10 +36,10 @@ You could use [Slack Legacy tokens](https://api.slack.com/custom-integrations/le
 ```json
 {
   "checkDatadogCustomMetricsUsage": {
-    "DATADOG_API_KEY_SSM": "<The parameter store key of your Datadog API Key>",
-    "DATADOG_APP_KEY_SSM": "<The parameter store key of your Datadog APP Key>",
+    "DATADOG_API_KEY_SSM_PARAM_NAME": "<The AWS Parameter Store name of your Datadog API Key>",
+    "DATADOG_APP_KEY_SSM_PARAM_NAME": "<The AWS Parameter Store name of your Datadog APP Key>",
     "CUSTOM_METRICS_INCLUDED_PER_HOST": "100",
-    "SLACK_TOKEN_SSM": "<The parameter store key of your Slack token>",
+    "SLACK_TOKEN_SSM_PARAM_NAME": "<The AWS Parameter Store name of your Slack token>",
     "SLACK_CHANNEL_ID": "<Your Slack Channel ID>",
     "LOG_LEVEL": "DEBUG"
   }
@@ -54,7 +54,7 @@ See [./env.json.sample](./env.json.sample)
 **Invoking function locally using a local sample payload**
 
 ```bash
-sam local invoke --no-event -n env.json "checkDatadogCustomMetricsUsage" <<< "{}"
+sam local invoke -t template.yaml --no-event -n env.json "checkDatadogCustomMetricsUsage" <<< "{}"
 ```
 
 ## Deployment
@@ -78,9 +78,9 @@ make build package
 Finally, deploy by following command
 
 ```bash
-DATADOG_API_KEY_SSM=<Your Parameter Store Key> && \
-  DATADOG_APP_KEY_SSM=<Your Parameter Store Key> && \
-  SLACK_TOKEN_SSM=<Your Parameter Store Key> && \
+DATADOG_API_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
+  DATADOG_APP_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
+  SLACK_TOKEN_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   SLACK_CHANNEL_ID=<Your Slack Channel ID> && \
   EXECUTION_IAM_ROLE_ARN=<The Arn of IAM Role for executing or leave blank to create automatically> && \
   make deploy
