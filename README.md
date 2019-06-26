@@ -76,15 +76,17 @@ The needed secrets are:
 
 See [setup process](#setup-process) for more information.
 
-Then build and package by:
+Then launch this application by using Serverless Application Repository
+
+[Launch now](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:461248263104:applications~check-datadog-custom-metrics-usage)
+
+Or you could deploy to your own system as follows:
 
 ```bash
+# Build application and package
 make build package
-```
 
-Finally, deploy by following command
-
-```bash
+# Deploy
 DATADOG_API_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   DATADOG_APP_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   SLACK_TOKEN_SSM_PARAM_NAME=<Your Parameter Store Key> && \
