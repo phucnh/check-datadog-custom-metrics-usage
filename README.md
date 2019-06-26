@@ -76,21 +76,29 @@ The needed secrets are:
 
 See [setup process](#setup-process) for more information.
 
-Then build and package by:
+Then launch this application by using Serverless Application Repository
+
+[Launch now](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:461248263104:applications~check-datadog-custom-metrics-usage)
+
+Or you could deploy to your own system as follows:
 
 ```bash
+# Build application and package
 make build package
-```
 
-Finally, deploy by following command
-
-```bash
+# Deploy
 DATADOG_API_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   DATADOG_APP_KEY_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   SLACK_TOKEN_SSM_PARAM_NAME=<Your Parameter Store Key> && \
   SLACK_CHANNEL_ID=<Your Slack Channel ID> && \
   EXECUTION_IAM_ROLE_ARN=<The Arn of IAM Role for executing or leave blank to create automatically> && \
   make deploy
+```
+
+## Publish to [AWS SAR](https://aws.amazon.com/serverless/serverlessrepo/)
+
+```bash
+make build package publish
 ```
 
 ## Message Template
@@ -105,7 +113,3 @@ Variable template              | Description
 `#{custom_metrics_limit}`      | The upper limit of your usage custom metrics. When `avg_of_num_custom_metrics` is greater than this value, the notification is sent. Calculated by `round(avg_of_num_hosts) * CUSTOM_METRICS_INCLUDED_PER_HOST`
 `#{check_from}`                | The beginning hour of checking process (in UTC)
 `#{check_to}`                  | The ending hour of checking process (in UTC)
-
-### TODO
-
-- [ ] Create SAR

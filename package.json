@@ -1,7 +1,7 @@
 {
-  "name": "check-datadog-custom-metrics-limit",
+  "name": "check-datadog-custom-metrics-usage",
   "version": "0.0.1",
-  "description": "Check datadog custom metrics limit",
+  "description": "Check datadog custom metrics usage",
   "scripts": {
     "format-code": "prettier --config ./dev-tools/prettier.config.js --write \"**/**.{js,json}\"",
     "test": "mocha --recursive test/**/**.js"
