@@ -1,5 +1,5 @@
 {
-  "name": "# check-datadog-custom-metrics-usage",
+  "name": "check-datadog-custom-metrics-usage",
   "version": "0.0.1",
   "description": "Check datadog custom metrics usage",
   "scripts": {
