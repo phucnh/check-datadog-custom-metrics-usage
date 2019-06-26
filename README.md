@@ -31,7 +31,7 @@ You could use [Slack Legacy tokens](https://api.slack.com/custom-integrations/le
 
 ## Local development
 
-**Setup environment variables in env.json**
+#### Setup environment variables in env.json
 
 ```json
 {
@@ -46,12 +46,12 @@ You could use [Slack Legacy tokens](https://api.slack.com/custom-integrations/le
 }
 ```
 
-- The default of `CUSTOM_METRICS_INCLUDED_PER_HOST` is 100 (Pro plan)
+- The default of `CUSTOM_METRICS_INCLUDED_PER_HOST` is 100 (Pro plan).
 - The `LOG_LEVEL` accepted `DEBUG`, `INFO`, `WARN`, `ERROR` values
 
-See [./env.json.sample](./env.json.sample)
+See [./env.json.sample](./env.json.sample) for more information.
 
-**Invoking function locally using a local sample payload**
+#### Invoking function locally using a local sample payload
 
 ```bash
 sam local invoke -t template.yaml --no-event -n env.json "checkDatadogCustomMetricsUsage" <<< "{}"
@@ -68,6 +68,13 @@ aws ssm put-parameter \
   --value <Your Datadog API Key> \
   --type SecureString
 ```
+
+The needed secrets are:
+- The Datadog API Key
+- The Datadog Application Key
+- The Slack Token
+
+See [setup process](#setup-process) for more information.
 
 Then build and package by:
 
