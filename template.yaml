@@ -7,10 +7,10 @@ Globals:
   Function:
     Timeout: 60
 Parameters:
-  DatadogApiKeySSM:
+  DatadogApiKeySSMParamName:
     Type: AWS::SSM::Parameter::Name
     Description: The Systems Manager Parameter Store name of your Datadog API Key.
-  DatadogApplicationKeySSM:
+  DatadogApplicationKeySSMParamName:
     Type: AWS::SSM::Parameter::Name
     Description: The Systems Manager Parameter Store name of your Datadog Application Key.
   CustomMetricsIncludedPerHost:
@@ -19,7 +19,7 @@ Parameters:
     Description: >
       The number of Datadog custom metrics included per host. It depends on your plan.
       You can also input your own number for customizing the upper limit.
-  SlackTokenSSM:
+  SlackTokenSSMParamName:
     Type: AWS::SSM::Parameter::Name
     Default: ''
     Description: The Systems Manager Parameter Store name of Slack token for sending message.
@@ -64,10 +64,10 @@ Resources:
       Environment:
         Variables:
           LOG_LEVEL: INFO
-          DATADOG_API_KEY_SSM: !Ref DatadogApiKeySSM
-          DATADOG_APP_KEY_SSM: !Ref DatadogApplicationKeySSM
+          DATADOG_API_KEY_SSM_PARAM_NAME: !Ref DatadogApiKeySSMParamName
+          DATADOG_APP_KEY_SSM_PARAM_NAME: !Ref DatadogApplicationKeySSMParamName
           CUSTOM_METRICS_INCLUDED_PER_HOST: !Ref CustomMetricsIncludedPerHost
-          SLACK_TOKEN_SSM: !Ref SlackTokenSSM
+          SLACK_TOKEN_SSM_PARAM_NAME: !Ref SlackTokenSSMParamName
           SLACK_CHANNEL_ID: !Ref SlackChannelId
           SLACK_MESSAGE_TEMPLATE: !Ref SlackMessageTemplate
 
@@ -93,9 +93,9 @@ Resources:
                 Action:
                   - ssm:GetParameter
                 Resource:
-                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatadogApiKeySSM}
-                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatadogApplicationKeySSM}
-                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${SlackTokenSSM}
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatadogApiKeySSMParamName}
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${DatadogApplicationKeySSMParamName}
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${SlackTokenSSMParamName}
 Outputs:
   CheckDatadogCustomMetricsUsageFunction:
     Description: "Check datadog custom metrics usage function"
