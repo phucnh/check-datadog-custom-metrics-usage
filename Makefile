@@ -31,7 +31,6 @@ publish:        ## Publish SAM application to AWS Serverless Application Reposit
 		aws s3 cp README.md s3://$(S3_BUCKET)/metadata/
 
 		echo '-- Publish to AWS Serverless Application Repository'
-		sam publish -t .aws-sam/build/packed.yml --region ap-northeast-1
 		sam publish -t .aws-sam/build/packed.yml --region us-east-1
 
 clean:          ## Clean built artifacts
