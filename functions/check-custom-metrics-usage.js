@@ -59,14 +59,17 @@ async function getSSMValue(key) {
 }
 
 async function init() {
-  log.debug(`Datadog api key SSM Parameter Store name: ${process.env['DATADOG_API_KEY_SSM']}`);
-  datadogAuth.apiKey = await getSSMValue(process.env['DATADOG_API_KEY_SSM']);
+  const ddApiKeyParamName = process.env['DATADOG_API_KEY_SSM_PARAM_NAME'];
+  log.debug(`The Datadog API Key Parameter Store name: ${ddApiKeyParamName}`);
+  datadogAuth.apiKey = await getSSMValue(ddApiKeyParamName);
 
-  log.debug(`Datadog api key SSM Parameter Store name: ${process.env['DATADOG_APP_KEY_SSM']}`);
-  datadogAuth.appKey = await getSSMValue(process.env['DATADOG_APP_KEY_SSM']);
+  const ddAppKeyParamName = process.env['DATADOG_APP_KEY_SSM_PARAM_NAME'];
+  log.debug(`The Datadog Application Key Parameter Store name: ${ddAppKeyParamName}`);
+  datadogAuth.appKey = await getSSMValue(ddAppKeyParamName);
 
-  log.debug(`Datadog api key SSM Parameter Store name: ${process.env['SLACK_TOKEN_SSM']}`);
-  slackAuth.token = await getSSMValue(process.env['SLACK_TOKEN_SSM']);
+  const slackTokenParamName = process.env['SLACK_TOKEN_SSM_PARAM_NAME'];
+  log.debug(`The Slack Token Parameter Store name: ${slackTokenParamName}`);
+  slackAuth.token = await getSSMValue(slackTokenParamName);
 }
 
 async function notify(startHr, endHr, checkResult) {
